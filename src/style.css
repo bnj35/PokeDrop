@@ -31,3 +31,18 @@ body
     border-radius: 5px;
     outline: none;
 }
+
+p{
+    position: fixed;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    bottom: 50px;
+    color: #fff;
+    opacity: 0.5;
+    mix-blend-mode: difference;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+}

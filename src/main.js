@@ -351,9 +351,6 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
         requestAnimationFrame(animate);
       }
 
-      if (progress === 1) {
-        animPlaying = false;
-      }
     }
     animate();
   }
