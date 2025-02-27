@@ -356,6 +356,10 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
         requestAnimationFrame(animate);
       }
 
+      if (progress === 1) {
+        animPlaying = false;
+      }
+
     }
     animate();
   }
@@ -376,9 +380,9 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
 
     const intersects = raycaster.intersectObjects(scene.children, true);
 
-    if (intersects.length > 0 && isOpen === false && isFinished === false) {
+    if (intersects.length > 0 && isOpen === false && isFinished === false && animPlaying === false) {
       onOpen();
-    } else if (intersects.length > 0 && isOpen === true && isFinished === false) {
+    } else if (intersects.length > 0 && isOpen === true && isFinished === false && animPlaying === false) {
       open();
     } else if (isFinished === true ) {
       window.location.reload();
