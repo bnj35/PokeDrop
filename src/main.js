@@ -10,18 +10,25 @@ import { EffectComposer } from 'three/examples/jsm/Addons.js';
 import { RenderPass } from 'three/examples/jsm/Addons.js';
 import { UnrealBloomPass } from 'three/examples/jsm/Addons.js';
 import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js';
-import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
-import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader.js';
 
 window.addEventListener("load", () => {
   document.getElementById("loader").style.display = "none";
-  // const myst = new Audio("/myst.mp3");
-  // myst.volume = 0.0;
-  // myst.loop = true;
-  // myst.play().catch(err => {
-  //   console.warn("Audio playback failed:", err);
-  // });
+
+  const infoDrop = document.getElementById("infoDrop");
+
+  const [tauxDore, tauxJaune, tauxJauneGris, tauxJauneRoue, tauxNoir, tauxBlanc, tauxGris] = TauxDrop();
+
+  infoDrop.innerHTML = `
+    <li>Common: ${tauxBlanc}%</li>
+    <li>Super Common: ${tauxGris}%</li>
+    <li>Uncommon: ${tauxNoir}%</li>
+    <li>Ultra Rare: ${tauxJauneRoue}%</li>
+    <li>Super Rare: ${tauxJauneGris}%</li>
+    <li>Rare: ${tauxJaune}%</li>
+    <li>Legendary: ${tauxDore}%</li>
+  `;
 });
+
 
 /**
  * Base
@@ -80,13 +87,13 @@ const texture = new THREE.MeshStandardMaterial({
 //drop
 
 function TauxDrop() {
-  const dropGris = 36;
-  const dropDore = 6;
-  const dropJaune = 12;
-  const dropJauneGris = 12;
-  const dropJauneRoue = 6;
-  const dropNoir = 24;
-  const dropBlanc = 24;
+  const dropGris = 50;
+  const dropDore = 10;
+  const dropJaune = 35;
+  const dropJauneGris = 30;
+  const dropJauneRoue = 20;
+  const dropNoir = 40;
+  const dropBlanc = 45;
 
 
   const tauxDore = Math.floor((dropDore / (dropGris + dropDore + dropJaune + dropJauneGris + dropJauneRoue + dropNoir + dropBlanc)) * 100);
@@ -106,6 +113,10 @@ function TauxDrop() {
 const fog = new THREE.Fog(0xffffff, 1, 30);
 scene.fog = fog;
 
+document.getElementById("info").addEventListener("click", () => {
+  document.getElementById("infoDrop").classList.toggle("active");
+  document.getElementById("info").classList.toggle("active");
+});
 /**
  * Gltf
  */
@@ -220,51 +231,41 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
 
       function dropTexture() {
         const [tauxDore, tauxJaune, tauxJauneGris, tauxJauneRoue, tauxNoir, tauxBlanc, tauxGris] = TauxDrop();
-        console.log(tauxDore, tauxJaune, tauxJauneGris, tauxJauneRoue, tauxNoir, tauxBlanc, tauxGris);
         
         const random = Math.floor(Math.random() * 100);
 
         const rarete = document.getElementById("rarete");
-        console.log(random);
-          
       
         gltf.scene.traverse((child) => {
           if (child.isMesh) {
             if (random < tauxDore) {
               child.material.map = TextureDore;
-              rarete.innerHTML = "Legendary <br>"+tauxDore+"%";
+              rarete.innerHTML = "Legendary <br>";
               rarete.style.color = "goldenrod";
-              console.log("Dore");
             } else if (random < tauxDore + tauxJaune) {
               child.material.map = TextureJaune;
-              rarete.innerHTML = "Ultra Rare <br>"+tauxJaune+"%";
+              rarete.innerHTML = "Rare <br>";
               rarete.style.color = "gold";
-              console.log("Jaune");
             } else if (random < tauxDore + tauxJaune + tauxJauneGris) {
               child.material.map = TextureJauneGris;
-              rarete.innerHTML = "Super Rare <br>"+tauxJauneGris+"%";
+              rarete.innerHTML = "Super Rare <br>";
               rarete.style.color = "olive";
-              console.log("JauneGris");
             } else if (random < tauxDore + tauxJaune + tauxJauneGris + tauxJauneRoue) {
               child.material.map = TextureJauneRoue;
-              rarete.innerHTML = "Rare <br>"+tauxJauneRoue+"%";
+              rarete.innerHTML = "Ultra Rare <br>";
               rarete.style.color = "coral";
-              console.log("JauneRoue");
             } else if (random < tauxDore + tauxJaune + tauxJauneGris + tauxJauneRoue + tauxNoir) {
               child.material.map = TextureNoir;
-              rarete.innerHTML = "Uncommon <br>"+tauxNoir+"%";
+              rarete.innerHTML = "Uncommon <br>";
               rarete.style.color = "black";
-              console.log("Noir");
             } else if (random < tauxDore + tauxJaune + tauxJauneGris + tauxJauneRoue + tauxNoir + tauxBlanc) {
               child.material.map = TextureBlanc;
-              rarete.innerHTML = "Common <br>"+tauxBlanc+"% ";
+              rarete.innerHTML = "Common <br>";
               rarete.style.color = "silver";
-              console.log("Blanc");
             } else {
               child.material.map = TextureGris;
-              rarete.innerHTML = "Super Common <br>"+tauxGris+"%";
+              rarete.innerHTML = "Super Common <br>";
               rarete.style.color = "grey";
-              console.log("Gris");
             }
             child.material.needsUpdate = true;
           }
