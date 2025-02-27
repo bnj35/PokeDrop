@@ -62,13 +62,16 @@ hdrLoader.load("/hdr.hdr", (texture) => {
  */
 
 const NormalTexture = new THREE.TextureLoader().load("/NormalMap.png");
-const TextureGris = new THREE.TextureLoader().load("/TextureGRIS.png");
+const TextureGris = new THREE.TextureLoader().load("/texture/1.jpg");
+const TextureDore = new THREE.TextureLoader().load("/texture/2.jpg");
+const TextureJaune = new THREE.TextureLoader().load("/texture/3.jpg");
+const TextureJauneGris = new THREE.TextureLoader().load("/texture/4.jpg");
+const TextureJauneRoue = new THREE.TextureLoader().load("/texture/5.jpg");
+const TextureNoir = new THREE.TextureLoader().load("/texture/6.jpg");
+const TextureBlanc = new THREE.TextureLoader().load("/texture/7.jpg");
 
-const textureBleu = new THREE.MeshStandardMaterial({
-  map: TextureGris,
-  color: TextureGris,
-  roughnessMap: TextureGris,
-  metalnessMap: TextureGris,
+const texture = new THREE.MeshStandardMaterial({
+  map: TextureJauneRoue,
   normalMap: NormalTexture,
 });
 
@@ -208,12 +211,11 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
       function dropTexture() {
         const tauxDrop = TauxDrop();
         const random = Math.floor(Math.random() * 100);
+        console.log(random);
         if (tauxDrop < random) {
           gltf.scene.traverse((child) => {
             if (child.isMesh) {
-              child.material = textureBleu;
-              child.material.roughness = 0.5;
-              child.material.metalness = 0.5;
+              child.material = texture;
             }
           });
         }
