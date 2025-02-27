@@ -62,11 +62,13 @@ hdrLoader.load("/hdr.hdr", (texture) => {
  */
 
 const NormalTexture = new THREE.TextureLoader().load("/NormalMap.png");
+const TextureGris = new THREE.TextureLoader().load("/TextureGRIS.png");
 
 const textureBleu = new THREE.MeshStandardMaterial({
-  color: 0x808080,
-  roughness: 1,
-  metalness: 0,
+  map: TextureGris,
+  color: TextureGris,
+  roughnessMap: TextureGris,
+  metalnessMap: TextureGris,
   normalMap: NormalTexture,
 });
 
@@ -259,7 +261,6 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
         scene.remove(openLight);
         scene.remove(gltf.scene);
         isFinished = true;
-        animPlaying = false;
       }
 
       if (progress < 1) {
@@ -375,11 +376,11 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
 
     const intersects = raycaster.intersectObjects(scene.children, true);
 
-    if (intersects.length > 0 && isOpen === false) {
+    if (intersects.length > 0 && isOpen === false && isFinished === false) {
       onOpen();
-    } else if (intersects.length > 0 && isOpen === true) {
+    } else if (intersects.length > 0 && isOpen === true && isFinished === false) {
       open();
-    } else if (intersects && isFinished === true ) {
+    } else if (isFinished === true ) {
       window.location.reload();
     }
     else if(animPlaying === true){
