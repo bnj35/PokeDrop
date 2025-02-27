@@ -61,11 +61,15 @@ hdrLoader.load("/hdr.hdr", (texture) => {
  * Textures
  */
 
+const NormalTexture = new THREE.TextureLoader().load("/NormalMap.png");
+
 const textureBleu = new THREE.MeshStandardMaterial({
   color: 0x808080,
-  roughness: 0.5,
-  metalness: 0.5,
+  roughness: 1,
+  metalness: 0,
+  normalMap: NormalTexture,
 });
+
 
 //drop
 
@@ -370,7 +374,6 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
     raycaster.setFromCamera(mouse, camera);
 
     const intersects = raycaster.intersectObjects(scene.children, true);
-    console.log(intersects);
 
     if (intersects.length > 0 && isOpen === false) {
       onOpen();
