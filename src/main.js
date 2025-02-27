@@ -185,7 +185,6 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
 
           if (progress === 1) {
             scene.add(plane, plane2);
-            animPlaying = false;
             isFinished = true;
           }
 
@@ -220,6 +219,7 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
     });
 
     function animate() {
+      animPlaying = true;
       const currentTime = performance.now();
       const elapsedTime = (currentTime - startTime) / 1000;
       const progress = Math.min(elapsedTime / duration, 1);
@@ -254,7 +254,7 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
       if (progress === 1) {
         scene.remove(openLight);
         scene.remove(gltf.scene);
-        isOpen = false;
+        isFinished = true;
         animPlaying = false;
       }
 
@@ -274,11 +274,6 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
     box.position.set(radius * Math.cos(angle), 0, radius * Math.sin(angle));
     Loot.push(box);
     scene.add(box);
-  
-
-    //raycaster
-   
-  
   }
 
   function onOpen() {
@@ -384,12 +379,11 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
       onOpen();
     } else if (intersects.length > 0 && isOpen === true) {
       open();
-    } else if (intersects.length > 0 && isFinished === true || intersects.length === 0 && isFinished === true) {
-      isFinished = false;
-      isOpen = false;
+    } else if (intersects && isFinished === true ) {
       window.location.reload();
     }
     else if(animPlaying === true){
+      console.log("Animation en cours");
       return;
     }
   });
