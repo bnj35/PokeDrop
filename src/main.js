@@ -14,6 +14,7 @@ import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader.js';
 
 window.addEventListener("load", () => {
+  document.getElementById("loader").style.display = "none";
   // const myst = new Audio("/myst.mp3");
   // myst.volume = 0.0;
   // myst.loop = true;
@@ -247,7 +248,7 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
             } else if (random < tauxDore + tauxJaune + tauxJauneGris + tauxJauneRoue) {
               child.material.map = TextureJauneRoue;
               rarete.innerHTML = "Rare <br>"+tauxJauneRoue+"%";
-              rarete.style.color = "red";
+              rarete.style.color = "coral";
               console.log("JauneRoue");
             } else if (random < tauxDore + tauxJaune + tauxJauneGris + tauxJauneRoue + tauxNoir) {
               child.material.map = TextureNoir;
