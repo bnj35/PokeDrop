@@ -15,7 +15,7 @@ import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectio
 
 window.addEventListener("load", () => {
   const myst = new Audio("/myst.mp3");
-  myst.volume = 0.2;
+  myst.volume = 0.0;
   myst.loop = true;
   myst.play().catch(err => {
     console.warn("Audio playback failed:", err);
@@ -62,7 +62,7 @@ hdrLoader.load("/hdr.hdr", (texture) => {
  */
 
 const textureBleu = new THREE.MeshStandardMaterial({
-  color: 0x0000ff,
+  color: 0x808080,
   roughness: 0.5,
   metalness: 0.5,
 });
@@ -98,6 +98,7 @@ let mixer;
 let Loot = [];
 let isOpen = false;
 let isFinished = false;
+let animPlaying = false;
 
 gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
   const radius = 6;
@@ -111,6 +112,7 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
   action.clampWhenFinished = true;
 
   function open() {
+    animPlaying = true;
 
     // Play sound effect when box opens
     const audio = new Audio("/sound.mp3");
@@ -122,7 +124,6 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
     });
     audio.volume = 0.2;
     audio2.volume = 0.2;
-    console.log(audio);
     audio.play().catch(err => {
       console.warn("Audio playback failed:", err);
     });
@@ -143,14 +144,13 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
     );
     openLight.position.z = 3;
     openLight.rotateZ(Math.PI);
-    console.log(openLight.position);
     openLight.lookAt(camera.position);
     scene.add(openLight);
       
 
     const duration = 5;
     const startY = gltf.scene.position.y;
-    const endY = -10;
+    const endY = -15;
 
     const startCameraZ = camera.position.z;
     const endCameraZ = 3;
@@ -162,9 +162,7 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
       gltf.scene.scale.set(1, 1, 1);
 
       function pop() {
-        if (plane && plane2) {
-          scene.remove(plane, plane2);
-        }
+        animPlaying = true;
 
         // Animate position.y to 0 over 2 seconds
         const duration = 2;
@@ -184,10 +182,15 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
           gltf.scene.position.y = startY + (endY - startY) * progress;
           gltf.scene.position.z = startz + (endz - startz) * progress;
           scene.backgroundRotation.x = progress * Math.PI * 2.7;
+
           if (progress === 1) {
             scene.add(plane, plane2);
+            animPlaying = false;
+            isFinished = true;
           }
+
           requestAnimationFrame(animate);
+
         }
         animate();
       }
@@ -221,6 +224,9 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
       const elapsedTime = (currentTime - startTime) / 1000;
       const progress = Math.min(elapsedTime / duration, 1);
 
+      const startRotation = gltf.scene.rotation.y;
+      const endRotation = Math.PI;
+
       // Wait 2 seconds before starting movement
       if (elapsedTime < 0.5) {
         // Keep initial positions during wait period
@@ -235,6 +241,8 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
         camera.position.z =
           startCameraZ + (endCameraZ - startCameraZ) * adjustedProgress;
 
+         gltf.scene.rotation.y = startRotation + (endRotation - startRotation) * adjustedProgress *0.5;  
+
           openLight.position.y = 1 + (-15 - (-2)) * adjustedProgress;
           openLight.rotation.y = Math.sin(adjustedProgress * Math.PI * 2)*1.25;
       }
@@ -242,11 +250,12 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
       action.play();
 
       scene.backgroundRotation.x = progress * Math.PI * 2.7;
-      if (progress === 1) {
-        scene.add(plane, plane2);
 
+      if (progress === 1) {
+        scene.remove(openLight);
+        scene.remove(gltf.scene);
         isOpen = false;
-        isFinished = true;
+        animPlaying = false;
       }
 
       if (progress < 1) {
@@ -273,6 +282,8 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
   }
 
   function onOpen() {
+    
+    animPlaying = true;
 
     const audio = new Audio("/magie.mp3");
     audio.volume = 0.2;
@@ -344,6 +355,10 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
       if (progress < 1) {
         requestAnimationFrame(animate);
       }
+
+      if (progress === 1) {
+        animPlaying = false;
+      }
     }
     animate();
   }
@@ -363,20 +378,22 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
     raycaster.setFromCamera(mouse, camera);
 
     const intersects = raycaster.intersectObjects(scene.children, true);
+    console.log(intersects);
 
     if (intersects.length > 0 && isOpen === false) {
       onOpen();
     } else if (intersects.length > 0 && isOpen === true) {
       open();
-    } else if (isFinished === true) {
+    } else if (intersects.length > 0 && isFinished === true || intersects.length === 0 && isFinished === true) {
       isFinished = false;
       isOpen = false;
       window.location.reload();
     }
+    else if(animPlaying === true){
+      return;
+    }
   });
 
- 
-  
 });
 
 /**
