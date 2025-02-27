@@ -14,12 +14,12 @@ import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader.js';
 
 window.addEventListener("load", () => {
-  const myst = new Audio("/myst.mp3");
-  myst.volume = 0.0;
-  myst.loop = true;
-  myst.play().catch(err => {
-    console.warn("Audio playback failed:", err);
-  });
+  // const myst = new Audio("/myst.mp3");
+  // myst.volume = 0.0;
+  // myst.loop = true;
+  // myst.play().catch(err => {
+  //   console.warn("Audio playback failed:", err);
+  // });
 });
 
 /**
@@ -81,14 +81,23 @@ const texture = new THREE.MeshStandardMaterial({
 function TauxDrop() {
   const dropGris = 36;
   const dropDore = 6;
+  const dropJaune = 12;
+  const dropJauneGris = 12;
+  const dropJauneRoue = 6;
+  const dropNoir = 24;
+  const dropBlanc = 24;
 
-  const tauxDore = Math.floor((dropDore / (dropGris + dropDore)) * 100);
 
-  const tauxGris = 100 - tauxDore;
+  const tauxDore = Math.floor((dropDore / (dropGris + dropDore + dropJaune + dropJauneGris + dropJauneRoue + dropNoir + dropBlanc)) * 100);
+  const tauxJaune = Math.floor((dropJaune / (dropGris + dropDore + dropJaune + dropJauneGris + dropJauneRoue + dropNoir + dropBlanc)) * 100);
+  const tauxJauneGris = Math.floor((dropJauneGris / (dropGris + dropDore + dropJaune + dropJauneGris + dropJauneRoue + dropNoir + dropBlanc)) * 100);
+  const tauxJauneRoue = Math.floor((dropJauneRoue / (dropGris + dropDore + dropJaune + dropJauneGris + dropJauneRoue + dropNoir + dropBlanc)) * 100);
+  const tauxNoir = Math.floor((dropNoir / (dropGris + dropDore + dropJaune + dropJauneGris + dropJauneRoue + dropNoir + dropBlanc)) * 100);
+  const tauxBlanc = Math.floor((dropBlanc / (dropGris + dropDore + dropJaune + dropJauneGris + dropJauneRoue + dropNoir + dropBlanc)) * 100);
+  const tauxGris = Math.floor((dropGris / (dropGris + dropDore + dropJaune + dropJauneGris + dropJauneRoue + dropNoir + dropBlanc)) * 100);
 
-  return tauxDore;
+  return [tauxDore, tauxJaune, tauxJauneGris, tauxJauneRoue, tauxNoir, tauxBlanc, tauxGris];
 }
-
 // Stats
 // const stats = new Stats();
 // document.body.appendChild(stats.dom);
@@ -209,16 +218,56 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
       }
 
       function dropTexture() {
-        const tauxDrop = TauxDrop();
+        const [tauxDore, tauxJaune, tauxJauneGris, tauxJauneRoue, tauxNoir, tauxBlanc, tauxGris] = TauxDrop();
+        console.log(tauxDore, tauxJaune, tauxJauneGris, tauxJauneRoue, tauxNoir, tauxBlanc, tauxGris);
+        
         const random = Math.floor(Math.random() * 100);
+
+        const rarete = document.getElementById("rarete");
         console.log(random);
-        if (tauxDrop < random) {
-          gltf.scene.traverse((child) => {
-            if (child.isMesh) {
-              child.material = texture;
+          
+      
+        gltf.scene.traverse((child) => {
+          if (child.isMesh) {
+            if (random < tauxDore) {
+              child.material.map = TextureDore;
+              rarete.innerHTML = "Legendary <br>"+tauxDore+"%";
+              rarete.style.color = "goldenrod";
+              console.log("Dore");
+            } else if (random < tauxDore + tauxJaune) {
+              child.material.map = TextureJaune;
+              rarete.innerHTML = "Ultra Rare <br>"+tauxJaune+"%";
+              rarete.style.color = "gold";
+              console.log("Jaune");
+            } else if (random < tauxDore + tauxJaune + tauxJauneGris) {
+              child.material.map = TextureJauneGris;
+              rarete.innerHTML = "Super Rare <br>"+tauxJauneGris+"%";
+              rarete.style.color = "olive";
+              console.log("JauneGris");
+            } else if (random < tauxDore + tauxJaune + tauxJauneGris + tauxJauneRoue) {
+              child.material.map = TextureJauneRoue;
+              rarete.innerHTML = "Rare <br>"+tauxJauneRoue+"%";
+              rarete.style.color = "red";
+              console.log("JauneRoue");
+            } else if (random < tauxDore + tauxJaune + tauxJauneGris + tauxJauneRoue + tauxNoir) {
+              child.material.map = TextureNoir;
+              rarete.innerHTML = "Uncommon <br>"+tauxNoir+"%";
+              rarete.style.color = "black";
+              console.log("Noir");
+            } else if (random < tauxDore + tauxJaune + tauxJauneGris + tauxJauneRoue + tauxNoir + tauxBlanc) {
+              child.material.map = TextureBlanc;
+              rarete.innerHTML = "Common <br>"+tauxBlanc+"% ";
+              rarete.style.color = "silver";
+              console.log("Blanc");
+            } else {
+              child.material.map = TextureGris;
+              rarete.innerHTML = "Super Common <br>"+tauxGris+"%";
+              rarete.style.color = "grey";
+              console.log("Gris");
             }
-          });
-        }
+            child.material.needsUpdate = true;
+          }
+        });
       }
       dropTexture();
       modelRotation();
@@ -485,6 +534,11 @@ const renderer = new THREE.WebGLRenderer({
   canvas: canvas,
   antialias: true,
   alpha: true,
+  toneMapping: THREE.ACESFilmicToneMapping,
+  toneMappingExposure: 1,
+  toneMappingWhitePoint: 1,
+  gammaFactor: 2.2,
+  outputEncoding: THREE.sRGBEncoding,
 });
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -497,11 +551,10 @@ composer.addPass(renderPass)
 composer.addPass(new UnrealBloomPass(new THREE.Vector2(sizes.width, sizes.height), 0.12, 0.1, 0.5))
 
 const smaaPass = new SMAAPass(window.innerWidth * renderer.getPixelRatio(), window.innerHeight * renderer.getPixelRatio());
-
 composer.addPass(smaaPass);
 
-const gammaCorrectionPass = new ShaderPass(GammaCorrectionShader);
-composer.addPass(gammaCorrectionPass);
+// const gammaCorrectionPass = new ShaderPass(GammaCorrectionShader);
+// composer.addPass(gammaCorrectionPass);
 
 const clic = new Audio("/clic.mp3");
 clic.volume = 1;
