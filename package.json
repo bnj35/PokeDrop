@@ -5,13 +5,13 @@
   "homepage": "https://bnj35.github.io/PokeDrop/",
   "type": "module",
  
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "predeploy":"npm run build",
-    "deploy": "gh-pages -d dist"
-  },
+"scripts": {
+  "dev": "vite",
+  "build": "vite build",
+  "preview": "vite preview",
+  "predeploy": "npm run build",
+  "deploy": "gh-pages -d dist"
+},
   "devDependencies": {
     "vite": "^6.2.0"
   },
