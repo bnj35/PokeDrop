@@ -16,7 +16,8 @@ window.addEventListener("load", () => {
 
   const infoDrop = document.getElementById("infoDrop");
 
-
+  const [tauxDore, tauxJaune, tauxJauneGris, tauxJauneRoue, tauxNoir, tauxBlanc, tauxGris] = TauxDrop();
+  
   infoDrop.innerHTML = `
     <li>Legendary: ${tauxBlanc}%</li>
     <li>Ultra Rare: ${tauxJauneGris}%</li>
