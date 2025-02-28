@@ -16,16 +16,16 @@ window.addEventListener("load", () => {
 
   const infoDrop = document.getElementById("infoDrop");
 
-  const [tauxDore, tauxJaune, tauxJauneGris, tauxJauneRoue, tauxNoir, tauxBlanc, tauxGris] = TauxDrop();
 
   infoDrop.innerHTML = `
-    <li>Common: ${tauxBlanc}%</li>
-    <li>Super Common: ${tauxGris}%</li>
+    <li>Legendary: ${tauxBlanc}%</li>
+    <li>Ultra Rare: ${tauxJauneGris}%</li>
+    <li>Super Rare: ${tauxJauneRoue}%</li>
+    <li>Uncommon: ${tauxDore}%</li>
     <li>Uncommon: ${tauxNoir}%</li>
-    <li>Ultra Rare: ${tauxJauneRoue}%</li>
-    <li>Super Rare: ${tauxJauneGris}%</li>
-    <li>Rare: ${tauxJaune}%</li>
-    <li>Legendary: ${tauxDore}%</li>
+    <li>Common: ${tauxGris}%</li>
+    <li>Super Common: ${tauxJaune}%</li>
+    
   `;
 });
 
@@ -87,13 +87,14 @@ const texture = new THREE.MeshStandardMaterial({
 //drop
 
 function TauxDrop() {
-  const dropGris = 50;
-  const dropDore = 10;
-  const dropJaune = 35;
-  const dropJauneGris = 30;
-  const dropJauneRoue = 20;
-  const dropNoir = 40;
-  const dropBlanc = 45;
+
+  const dropGris = 36;
+  const dropDore = 27;
+  const dropJaune = 41;
+  const dropJauneGris = 15;
+  const dropJauneRoue = 19;
+  const dropNoir = 28;
+  const dropBlanc = 12;
 
 
   const tauxDore = Math.floor((dropDore / (dropGris + dropDore + dropJaune + dropJauneGris + dropJauneRoue + dropNoir + dropBlanc)) * 100);
@@ -238,34 +239,34 @@ gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
       
         gltf.scene.traverse((child) => {
           if (child.isMesh) {
-            if (random < tauxDore) {
-              child.material.map = TextureDore;
+            if (random < tauxBlanc) {
+              child.material.map = TextureBlanc;
               rarete.innerHTML = "Legendary <br>";
-              rarete.style.color = "goldenrod";
-            } else if (random < tauxDore + tauxJaune) {
-              child.material.map = TextureJaune;
-              rarete.innerHTML = "Rare <br>";
-              rarete.style.color = "gold";
-            } else if (random < tauxDore + tauxJaune + tauxJauneGris) {
+              rarete.style.color = "silver";
+            } else if (random < tauxBlanc + tauxJauneGris) {
               child.material.map = TextureJauneGris;
-              rarete.innerHTML = "Super Rare <br>";
-              rarete.style.color = "olive";
-            } else if (random < tauxDore + tauxJaune + tauxJauneGris + tauxJauneRoue) {
-              child.material.map = TextureJauneRoue;
               rarete.innerHTML = "Ultra Rare <br>";
+              rarete.style.color = "olive";
+            } else if (random < tauxBlanc + tauxJauneGris + tauxJauneRoue) {
+              child.material.map = TextureJauneRoue;
+              rarete.innerHTML = "Super Rare <br>";
               rarete.style.color = "coral";
-            } else if (random < tauxDore + tauxJaune + tauxJauneGris + tauxJauneRoue + tauxNoir) {
+            } else if (random < tauxBlanc + tauxJauneGris + tauxJauneRoue + tauxDore) {
+              child.material.map = TextureDore;
+              rarete.innerHTML = "Uncommon <br>";
+              rarete.style.color = "goldenrod";
+            } else if (random < tauxBlanc + tauxJauneGris + tauxJauneRoue + tauxDore + tauxNoir) {
               child.material.map = TextureNoir;
               rarete.innerHTML = "Uncommon <br>";
               rarete.style.color = "black";
-            } else if (random < tauxDore + tauxJaune + tauxJauneGris + tauxJauneRoue + tauxNoir + tauxBlanc) {
-              child.material.map = TextureBlanc;
-              rarete.innerHTML = "Common <br>";
-              rarete.style.color = "silver";
-            } else {
+            } else if (random < tauxBlanc + tauxJauneGris + tauxJauneRoue + tauxDore + tauxNoir + tauxGris) {
               child.material.map = TextureGris;
-              rarete.innerHTML = "Super Common <br>";
+              rarete.innerHTML = "Common <br>";
               rarete.style.color = "grey";
+            } else {
+              child.material.map = TextureJaune;
+              rarete.innerHTML = "Super Common <br>";
+              rarete.style.color = "gold";
             }
             child.material.needsUpdate = true;
           }
