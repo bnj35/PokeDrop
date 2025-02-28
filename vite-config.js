@@ -1,26 +1,28 @@
-
+import viteBasicSslPlugin from "@vitejs/plugin-basic-ssl";
 import { resolve } from 'path'
-const isCodeSandbox = 'SANDBOX_URL' in process.env || 'CODESANDBOX_HOST' in process.env
 
 export default {
   root: './',
-  publicDir: '../public/',
-  base: process.env.NODE_ENV === 'production' ? '/PokeDrop/' : '',
+  publicDir: './public/',
+  base: './',
   server:
     {
       host: true,
-      open: !isCodeSandbox // Open if it's not a CodeSandbox
+      https: {
+        key: './projet-velo-vr-privateKey.key',
+        cert: './projet-velo-vr.crt'
+      }
     },
   build:
     {
-      outDir: '../dist',
       emptyOutDir: true,
       sourcemap: true,
-      rollupOptions:{
-        input:{
-          main:resolve(__dirname,'index.html'),
+      rollupOptions: {
+        input: {
+          main: resolve(dirname, 'index.html'),
+          xrpart: resolve(dirname, 'xr-part.html'),
         },
-        output:{
+        output: {
           manualChunks: {
             three: ['three'],
           },
@@ -30,8 +32,10 @@ export default {
   resolve: {
     alias: {
       '@assets': '/assets',
-      '@js': '/js',
-      '@shaders': '/shaders',
+      '@js': '/src',
     }
-  }
+  },
+  plugins: [
+    viteBasicSslPlugin()
+    ]
 }
