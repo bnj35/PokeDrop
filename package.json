@@ -2,7 +2,9 @@
   "name": "drop",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://bnj35.github.io/PokeDrop/",
   "type": "module",
+ 
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -17,6 +19,6 @@
     "gh-pages": "^6.3.0",
     "lil-gui": "^0.20.0",
     "three": "^0.173.0"
-  },
-  "homepage": "https://bnj35.github.io/PokeDrop/"
+  }
+  
 }
