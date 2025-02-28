@@ -5,7 +5,7 @@ const isCodeSandbox = 'SANDBOX_URL' in process.env || 'CODESANDBOX_HOST' in proc
 export default {
   root: './',
   publicDir: '../public/',
-  base: './',
+  base: process.env.NODE_ENV === 'production' ? '/PokeDrop/' : '',
   server:
     {
       host: true,
