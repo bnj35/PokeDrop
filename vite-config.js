@@ -30,6 +30,7 @@ export default {
   resolve: {
     alias: {
       '@assets': '/assets',
+      '@js': '/js',
       '@shaders': '/shaders',
     }
   }
