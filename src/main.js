@@ -562,17 +562,13 @@ const clic = new Audio("/clic.mp3");
 clic.volume = 1;
 clic.loop = true;
 
-document.addEventListener("mousedown", () => {
+document.addEventListener("drag", () => {
   clic.play().catch(err => {
     console.warn("Audio playback failed:", err);
   });
 }
 );
-
-document.addEventListener("mouseup", () => {
-  clic.pause();
-}
-);
+clic.pause();
 
 
 /**
