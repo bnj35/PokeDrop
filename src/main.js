@@ -3,7 +3,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 // import Stats from "three/examples/jsm/libs/stats.module.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { TextureLoader } from "three";
-import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
+import { EXRLoader } from "three/examples/jsm/Addons.js";
 import { SkeletonUtils } from "three/examples/jsm/Addons.js";
 import { Raycaster } from "three";
 import { EffectComposer } from 'three/examples/jsm/Addons.js';
@@ -39,7 +39,7 @@ window.addEventListener("load", () => {
 
 // Loaders
 const gltfLoader = new GLTFLoader();
-const hdrLoader = new RGBELoader();
+const exrLoader = new EXRLoader();
 const textureLoader = new TextureLoader();
 
 // Canvas
@@ -59,11 +59,12 @@ scene.backgroundBlurriness = 4;
 scene.backgroundIntensity = 1.7;
 scene.backgroundRotation.z = 1.2;
 
-hdrLoader.load("/hdr.hdr", (texture) => {
+exrLoader.load("/EXR.exr", (texture) => {
   texture.mapping = THREE.EquirectangularReflectionMapping;
   scene.background = texture;
   scene.environment = texture;
 });
+
 
 /**
  *
@@ -118,6 +119,12 @@ scene.fog = fog;
 document.getElementById("info").addEventListener("click", () => {
   document.getElementById("infoDrop").classList.toggle("active");
   document.getElementById("info").classList.toggle("active");
+});
+
+document.getElementById("pourcentage").addEventListener("click", () => {
+  console.log("click");
+  document.getElementById("formPourcentage").classList.toggle("active");
+  document.getElementById("pourcentage").classList.toggle("active");
 });
 /**
  * Gltf

@@ -48,21 +48,50 @@ body
     font-family: Arial, sans-serif;
 }
 
-#info p{
+
+#info p, #pourcentage p{
     display: block;
   }
 
-#info.active p{
+#info.active p, #pourcentage.active p{
+    display: none;
+  }
+#pourcentage{
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    bottom: 15px;
+    left: 10px;
+    z-index: 200;
+    color: #000;
+    background-color: #fff;
+    padding: 15px 20px;
+    border-radius: 5px;
+    border: 1px solid #999999;
+    font-family: Arial, sans-serif;
+}
+
+
+#pourcentage p{
+    display: block;
+  }
+
+#pourcentage.active p{
     display: none;
   }
 
-#infoDrop{
+#infoDrop, #formPourcentage{
     display: none;
 }
 
 #infoDrop.active{
     display: block;
     height: fit-content;
+}
+
+#formPourcentage.active{
+    display: flex;
+    flex-direction: column;
 }
 
 li{
@@ -108,6 +137,7 @@ li{
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
+
 
 @keyframes spin {
     0% {
