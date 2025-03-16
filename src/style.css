@@ -50,7 +50,7 @@ body {
   z-index: 200;
   color: #000;
   background-color: #fff;
-  padding: 15px 20px;
+  padding: 1em;
   border-radius: 5px;
   border: 1px solid #a90000;
   font-family: Arial, sans-serif;
@@ -59,7 +59,7 @@ body {
 #formPourcentage {
   display: flex;
   flex-direction: column;
-  gap: 1em;
+  gap: 0.5em;
   align-items: center;
   justify-content: center;
 }
@@ -71,7 +71,7 @@ button {
 }
 
 input {
-    padding: 10px;
+    padding: 0.5em;
     border: 1px solid #ccc;
     border-radius: 5px;
     width: 100%;
@@ -143,4 +143,29 @@ button:hover {
   100% {
     transform: rotate(360deg);
   }
+}
+
+@media screen and (max-width: 768px) {
+  #pourcentage {
+    width:80%;
+    height: 80%;
+    gap: 0.2em;
+  }
+
+  #pourcentageForm {
+    gap: 0.2em;
+    font-size: 14px;
+  }
+
+  input,
+label,
+button {
+    font-size: 14px;
+}
+
+button {
+    padding: 5px 10px;
+}
+
+
 }

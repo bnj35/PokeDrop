@@ -143,6 +143,7 @@ document.getElementById("pourcentageButton").addEventListener("click", (event) =
 
 document.getElementById("defaultButton").addEventListener("click", () => {
   document.getElementById("bgForm").style.display = "none";
+  animPlaying = false;
 });
 
 /**
