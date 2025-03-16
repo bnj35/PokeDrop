@@ -14,22 +14,17 @@ import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js';
 window.addEventListener("load", () => {
   document.getElementById("loader").style.display = "none";
 
-  const infoDrop = document.getElementById("infoDrop");
-
-  const [tauxDore, tauxJaune, tauxJauneGris, tauxJauneRoue, tauxNoir, tauxBlanc, tauxGris] = TauxDrop();
-  
-  infoDrop.innerHTML = `
-    <li>Legendary: ${tauxBlanc}%</li>
-    <li>Ultra Rare: ${tauxJauneGris}%</li>
-    <li>Super Rare: ${tauxJauneRoue}%</li>
-    <li>Uncommon: ${tauxDore}%</li>
-    <li>Uncommon: ${tauxNoir}%</li>
-    <li>Common: ${tauxGris}%</li>
-    <li>Super Common: ${tauxJaune}%</li>
-    
-  `;
+  const storedValues = localStorage.getItem("dropValues");
+  if (!storedValues) {
+    document.getElementById("bgForm").style.display = "flex";
+    animPlaying = true;
+  } else {
+    document.getElementById("bgForm").style.display = "none";
+    animPlaying = false;
+  }
 });
 
+  
 
 /**
  * Base
@@ -89,23 +84,33 @@ const texture = new THREE.MeshStandardMaterial({
 //drop
 
 function TauxDrop() {
+  const defaultValues = {
+    dropGris: 36,
+    dropDore: 27,
+    dropJaune: 41,
+    dropJauneGris: 15,
+    dropJauneRoue: 19,
+    dropNoir: 28,
+    dropBlanc: 12,
+  };
 
-  const dropGris = 36;
-  const dropDore = 27;
-  const dropJaune = 41;
-  const dropJauneGris = 15;
-  const dropJauneRoue = 19;
-  const dropNoir = 28;
-  const dropBlanc = 12;
+  const storedValues = JSON.parse(localStorage.getItem("dropValues")) || defaultValues;
 
+  if (storedValues === defaultValues ){
+    localStorage.setItem("dropValues", JSON.stringify(defaultValues));
+  }
 
-  const tauxDore = Math.floor((dropDore / (dropGris + dropDore + dropJaune + dropJauneGris + dropJauneRoue + dropNoir + dropBlanc)) * 100);
-  const tauxJaune = Math.floor((dropJaune / (dropGris + dropDore + dropJaune + dropJauneGris + dropJauneRoue + dropNoir + dropBlanc)) * 100);
-  const tauxJauneGris = Math.floor((dropJauneGris / (dropGris + dropDore + dropJaune + dropJauneGris + dropJauneRoue + dropNoir + dropBlanc)) * 100);
-  const tauxJauneRoue = Math.floor((dropJauneRoue / (dropGris + dropDore + dropJaune + dropJauneGris + dropJauneRoue + dropNoir + dropBlanc)) * 100);
-  const tauxNoir = Math.floor((dropNoir / (dropGris + dropDore + dropJaune + dropJauneGris + dropJauneRoue + dropNoir + dropBlanc)) * 100);
-  const tauxBlanc = Math.floor((dropBlanc / (dropGris + dropDore + dropJaune + dropJauneGris + dropJauneRoue + dropNoir + dropBlanc)) * 100);
-  const tauxGris = Math.floor((dropGris / (dropGris + dropDore + dropJaune + dropJauneGris + dropJauneRoue + dropNoir + dropBlanc)) * 100);
+  const { dropGris, dropDore, dropJaune, dropJauneGris, dropJauneRoue, dropNoir, dropBlanc } = storedValues;
+
+  const total = dropGris + dropDore + dropJaune + dropJauneGris + dropJauneRoue + dropNoir + dropBlanc;
+
+  const tauxDore = Math.floor((dropDore / total) * 100);
+  const tauxJaune = Math.floor((dropJaune / total) * 100);
+  const tauxJauneGris = Math.floor((dropJauneGris / total) * 100);
+  const tauxJauneRoue = Math.floor((dropJauneRoue / total) * 100);
+  const tauxNoir = Math.floor((dropNoir / total) * 100);
+  const tauxBlanc = Math.floor((dropBlanc / total) * 100);
+  const tauxGris = Math.floor((dropGris / total) * 100);
 
   return [tauxDore, tauxJaune, tauxJauneGris, tauxJauneRoue, tauxNoir, tauxBlanc, tauxGris];
 }
@@ -116,16 +121,30 @@ function TauxDrop() {
 const fog = new THREE.Fog(0xffffff, 1, 30);
 scene.fog = fog;
 
-document.getElementById("info").addEventListener("click", () => {
-  document.getElementById("infoDrop").classList.toggle("active");
-  document.getElementById("info").classList.toggle("active");
+
+document.getElementById("pourcentageButton").addEventListener("click", (event) => {
+  event.preventDefault();
+
+  const dropValues = {
+    dropGris: parseInt(document.getElementById("common").value) || 36,
+    dropDore: parseInt(document.getElementById("uncommon").value) || 27,
+    dropJaune: parseInt(document.getElementById("superCommon").value) || 41,
+    dropJauneGris: parseInt(document.getElementById("ultraRare").value) || 15,
+    dropJauneRoue: parseInt(document.getElementById("superRare").value) || 19,
+    dropNoir: parseInt(document.getElementById("rare").value) || 28,
+    dropBlanc: parseInt(document.getElementById("legendary").value) || 12,
+  };
+
+  localStorage.setItem("dropValues", JSON.stringify(dropValues));
+  alert("Values saved!");
+  document.getElementById("bgForm").style.display = "none";
+  animPlaying = false;
 });
 
-document.getElementById("pourcentage").addEventListener("click", () => {
-  console.log("click");
-  document.getElementById("formPourcentage").classList.toggle("active");
-  document.getElementById("pourcentage").classList.toggle("active");
+document.getElementById("defaultButton").addEventListener("click", () => {
+  document.getElementById("bgForm").style.display = "none";
 });
+
 /**
  * Gltf
  */
@@ -138,6 +157,7 @@ let Loot = [];
 let isOpen = false;
 let isFinished = false;
 let animPlaying = false;
+
 
 gltfLoader.load("CubeLootBoxBakeAnim.glb", (gltf) => {
   const radius = 6;

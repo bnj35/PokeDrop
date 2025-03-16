@@ -11,39 +11,34 @@
     <div id="loader">
         <div id="loader-inner"></div>
     </div>
-    <div id="info">
-        <p>?</p>
-        <ul id="infoDrop">
-        </ul>
-    </div>
 
+<div id="bgForm">
     <div id="pourcentage">
-        <p >%</p>
+        <p >Remplir le nombre de modèles si besoins <br> Sinon appuyer sur : </p>
+        <button id="defaultButton">Passer</button>
         <form id="formPourcentage">
-            <label for="pourcentageInput">Pourcentage de chance d'avoir un shiny</label>
-            <input type="number" id="pourcentageInput" placeholder="0"/>
-            <label for="pourcentageInput">Pourcentage de chance d'avoir un shiny</label>
-            <input type="number" id="pourcentageInput" placeholder="0"/>
-            <label for="pourcentageInput">Pourcentage de chance d'avoir un shiny</label>
-            <input type="number" id="pourcentageInput" placeholder="0"/>
-            <label for="pourcentageInput">Pourcentage de chance d'avoir un shiny</label>
-            <input type="number" id="pourcentageInput" placeholder="0"/>
-            <label for="pourcentageInput">Pourcentage de chance d'avoir un shiny</label>
-            <input type="number" id="pourcentageInput" placeholder="0"/>
-            <label for="pourcentageInput">Pourcentage de chance d'avoir un shiny</label>
-            <input type="number" id="pourcentageInput" placeholder="0"/>
-            <label for="pourcentageInput">Pourcentage de chance d'avoir un shiny</label>
-            <input type="number" id="pourcentageInput" placeholder="0"/>
+            <label for="superCommon">Nombre d'impressions du plus commun</label>
+            <input type="number" id="superCommon" placeholder="0"/>
+            <label for="common">Nombre d'impressions du commun</label>
+            <input type="number" id="common" placeholder="0"/>
+            <label for="uncommon">Nombre d'impressions du uncommon</label>
+            <input type="number" id="uncommon" placeholder="0"/>
+            <label for="rare">Nombre d'impressions du rare</label>
+            <input type="number" id="rare" placeholder="0"/>
+            <label for="superRare">Nombre d'impressions du super rare</label>
+            <input type="number" id="superRare" placeholder="0"/>
+            <label for="ultraRare">Nombre d'impressions du ultra rare</label>
+            <input type="number" id="ultraRare" placeholder="0"/>
+            <label for="legendary">Nombre d'impressions du plus legendary</label>
+            <input type="number" id="legendary" placeholder="0"/>
             <button id="pourcentageButton">Valider</button>
         </form>
-
     </div>
+</div>
 
     <p id="dev">Developped by Benjamin AUGER</p>
     <h3 id="rarete"></h3>
 
-
-    </div>
     <canvas class="webgl"></canvas>
     <script type="module" src="./src/main.js"></script>
 </body>
