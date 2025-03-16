@@ -41,12 +41,15 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow-y: auto; /* Ajout pour permettre le défilement si nécessaire */
+  padding: 20px; /* Ajout pour éviter que le contenu touche les bords */
+  box-sizing: border-box; /* Pour inclure le padding dans la largeur totale */
 }
 
 #pourcentage {
   display: flex;
   flex-direction: column;
-  gap:0.5em;
+  gap: 0.5em;
   z-index: 200;
   color: #000;
   background-color: #fff;
@@ -54,6 +57,10 @@ body {
   border-radius: 5px;
   border: 1px solid #a90000;
   font-family: Arial, sans-serif;
+  max-height: 90vh; /* Limiter la hauteur à 90% de la vue */
+  overflow-y: auto; /* Permettre le défilement vertical si nécessaire */
+  width: auto; /* Laisser la largeur s'adapter au contenu */
+  max-width: 90%; /* Mais ne pas dépasser 90% de la largeur de l'écran */
 }
 
 #formPourcentage {
@@ -136,36 +143,47 @@ button:hover {
   animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
 @media screen and (max-width: 768px) {
   #pourcentage {
-    width:80%;
-    height: 80%;
+    width: 90%;
+    height: auto; /* Hauteur automatique au lieu de fixe */
     gap: 0.2em;
+    padding: 0.8em; /* Réduire légèrement le padding */
   }
 
-  #pourcentageForm {
+  #formPourcentage {
     gap: 0.2em;
-    font-size: 14px;
+    width: 100%;
   }
 
   input,
-label,
-button {
+  label,
+  button {
     font-size: 14px;
-}
+    margin-bottom: 0.3em; /* Ajouter un peu d'espace entre les éléments */
+  }
 
-button {
+  input {
+    padding: 0.3em; /* Réduire légèrement le padding des inputs */
+  }
+
+  button {
     padding: 5px 10px;
+    margin-top: 0.5em; /* Ajouter un peu d'espace au-dessus du bouton */
+  }
 }
 
+/* Ajout d'un breakpoint pour les très petits écrans */
+@media screen and (max-width: 480px) {
+  #pourcentage {
+    width: 95%;
+    padding: 0.6em;
+  }
+
+  input,
+  label,
+  button {
+    font-size: 12px;
+  }
 
 }
